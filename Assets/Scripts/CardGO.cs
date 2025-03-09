@@ -4,20 +4,18 @@ using UnityEditor.Tilemaps;
 using System;
 using System.Linq;
 
-public class CardClass : MonoBehaviour
+public class CardGO : MonoBehaviour
 {
     private bool revealed = false;
     public GameObject cardFront;
-    public string cardSuitNum;
-    public char cardSuit;
-    public int cardNum;
-    private char[] allowedSuits = { 'c', 'd', 'h', 's' };
+    private string cardSuitNum;
+    private char cardSuit;
+    private int cardNum;
+    private readonly char[] allowedSuits = { 'c', 'd', 'h', 's' };
+    private static int blankCardCount = 0;
 // Start is called once before the first execution of Update after the MonoBehaviour is created
-public CardClass(char cardSuit, int cardNum)
-    {
-        Initialize(cardSuit, cardNum);
-    }
-    public CardClass(string cardSuitNum)
+
+    public void Initialize(string cardSuitNum, bool isActive = true)
     {
         char cardSuit = cardSuitNum[0];
         int cardNum;
@@ -30,10 +28,10 @@ public CardClass(char cardSuit, int cardNum)
             Console.WriteLine($"Card String could not be parsed: {cardSuitNum}, setting to 0");
             cardNum = 0;
         }
-        Initialize(cardSuit, cardNum);
+        Initialize(cardSuit, cardNum, isActive);
     }
 
-    private void Initialize(char cardSuit, int cardNum)
+    public void Initialize(char cardSuit, int cardNum, bool isActive = true)
     {
         
         if (allowedSuits.Contains(cardSuit) && cardNum > 0 && cardNum < 14)
@@ -41,6 +39,7 @@ public CardClass(char cardSuit, int cardNum)
             this.cardSuit = cardSuit;
             this.cardNum = cardNum;
             this.cardSuitNum = $"{cardSuit}{cardNum}";
+            gameObject.name = $"{this.cardSuitNum} Card";
             // render the correct card
         }
         else
@@ -48,8 +47,13 @@ public CardClass(char cardSuit, int cardNum)
             this.cardSuit = 'b';
             this.cardNum = 0;
             this.cardSuitNum = $"{cardSuit}{cardNum}";
+            gameObject.name = $"Blank Card {blankCardCount}";
+            blankCardCount += 1;
             // render blank card
         }
+
+
+        gameObject.SetActive(isActive);
     }
 
     void Start()
@@ -60,15 +64,12 @@ public CardClass(char cardSuit, int cardNum)
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            FlipCard();
-        } 
+
     }
     public void FlipCard()
     {
         revealed = !revealed;
-        Debug.Log($"Revealed state: {revealed}");
+        Debug.Log($"Revealed state: {revealed}, card is {this.cardSuitNum}");
         transform.DORotate(new Vector3(0, revealed ? 180f : 0f, 0), 0.25f);
     }
 }

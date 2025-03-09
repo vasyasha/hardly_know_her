@@ -6,7 +6,9 @@ public class LogicScript : MonoBehaviour
 {
     public static LogicScript instance;
 
-    public static List<CardClass> currentDeck;
+    public DeckGO deckGOTemplate;
+
+    private static DeckGO currentDeck;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,8 +36,18 @@ public class LogicScript : MonoBehaviour
                 // Implement for deck placeholder
                 if (clickedGO.CompareTag("DeckPlaceholder"))
                 {
-                    MakeAndPlaceNewDeck();
+                    MakeAndPlaceNewDeck(clickedGO.transform.position, clickedGO.transform.rotation);
                 }
+                if (clickedGO.CompareTag("PlayingCard"))
+                {
+                    clickedGO.GetComponent<CardGO>().FlipCard();
+                }
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (currentDeck != null) {
+                currentDeck.DrawCard();
             }
         }
     }
@@ -52,9 +64,10 @@ public class LogicScript : MonoBehaviour
         return null;
     }
 
-    private void MakeAndPlaceNewDeck()
+    private void MakeAndPlaceNewDeck(Vector3 position, Quaternion rotation)
     {
         Debug.Log("MAKE NEW DECK");
+        currentDeck = Instantiate(deckGOTemplate, position, rotation);
     }
     
 }

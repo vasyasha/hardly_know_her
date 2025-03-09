@@ -503,6 +503,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3509e98348db724eb4702d291495c11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deckGOTemplate: {fileID: 5824509977477799936, guid: 54a27b1792267ed4e8de9e5465f3c815, type: 3}
 --- !u!4 &1489050716
 Transform:
   m_ObjectHideFlags: 0
